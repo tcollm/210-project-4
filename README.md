@@ -8,7 +8,7 @@ rsh>sendmsg user2 hello there!
 
 The command above should send the message "hello there!" to user **user2**. Note that the message is not enclosed within quotes.
 
-In this project, you will complete the missing pieces in the server and the client code. The places marked as "**TO DO:**" described the expected behavious of the code snippet you will be adding at those locations.
+In this project, you will complete the missing pieces in the server and the client code. The places marked as "**TODO:**" described the expected behavious of the code snippet you will be adding at those locations.
 Specifically, you will update **server.c** and **rsh.c** to obtain a working shell with messaging capabilities. 
 
 ### Compiling, Running, and Testing Your Code
@@ -48,7 +48,7 @@ git branch -M main
 git push -u origin main
 ```
 
-After these commands, you should have a copy of your starter code in your own repo and you can update **rsh.c** and **server.c** by completing the parts marked with "**TO DO:**". You can compile the server by typing "make server" and compile the client by typing "make rsh". You can execute the following git commands to push your updates to your own repo:
+After these commands, you should have a copy of your starter code in your own repo and you can update **rsh.c** and **server.c** by completing the parts marked with "**TODO:**". You can compile the server by typing "make server" and compile the client by typing "make rsh". You can execute the following git commands to push your updates to your own repo:
 
 ```
 git add rsh.c

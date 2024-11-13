@@ -29,7 +29,7 @@ int main() {
 	dummyfd = open("serverFIFO",O_WRONLY);
 
 	while (1) {
-		// TODO
+		// TODO:
 		// read requests from serverFIFO
 
 
@@ -39,7 +39,7 @@ int main() {
 
 		printf("Received a request from %s to send the message %s to %s.\n",req.source,req.msg,req.target);
 
-		// TODO
+		// TODO:
 		// open target FIFO and write the whole message struct to the target FIFO
 		// close target FIFO after writing the message
 

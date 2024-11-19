@@ -122,7 +122,7 @@ int main(int argc, char **argv) {
 		// if no argument is specified, you should print the following
 		// printf("sendmsg: you have to specify target user\n");
 		// if no message is specified, you should print the followingA
- 		// printf("sendMsg: you have to enter a message\n");
+ 		// printf("sendmsg: you have to enter a message\n");
 
 
 

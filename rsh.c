@@ -28,31 +28,33 @@ void terminate(int sig)
 	exit(0);
 }
 
-// Send a request to the server to send the message (msg) to the target user (target)
-// by creating the message structure and writing it to server's FIFO
 void sendmsg(char *user, char *target, char *msg)
 {
+	// TODO:
+	// Send a request to the server to send the message (msg) to the target user (target)
+	// by creating the message structure and writing it to server's FIFO
+
 	// create message:
-	struct message user_msg;
-	strncpy(user_msg.source, user, sizeof(user_msg.source) - 1); // copy source
-	user_msg.source[sizeof(user_msg.source) - 1] = '\0';				 // null terminate
+	struct message out_msg;
+	strncpy(out_msg.source, user, sizeof(out_msg.source) - 1); // copy source
+	out_msg.source[sizeof(out_msg.source) - 1] = '\0';				 // null terminate
 
-	strncpy(user_msg.target, target, sizeof(user_msg.target) - 1); // copy target
-	user_msg.target[sizeof(user_msg.target) - 1] = '\0';					 // null terminate
+	strncpy(out_msg.target, target, sizeof(out_msg.target) - 1); // copy target
+	out_msg.target[sizeof(out_msg.target) - 1] = '\0';					 // null terminate
 
-	strncpy(user_msg.msg, msg, sizeof(user_msg.msg) - 1); // copy msg
-	user_msg.msg[sizeof(user_msg.msg) - 1] = '\0';				// null terminate
+	strncpy(out_msg.msg, msg, sizeof(out_msg.msg) - 1); // copy msg
+	out_msg.msg[sizeof(out_msg.msg) - 1] = '\0';				// null terminate
 
 	// Open the server's FIFO for writing
 	int fd = open("serverFIFO", O_WRONLY);
-	if (fd == -1) // error check
+	if (fd == -1) // handle FIFO failure to open
 	{
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
 
 	// write to FIFO
-	if (write(fd, &user_msg, sizeof(user_msg)) == -1) // error check
+	if (write(fd, &out_msg, sizeof(out_msg)) == -1) // handle write error
 	{
 		perror("write");
 		close(fd);
@@ -66,14 +68,39 @@ void *messageListener(void *arg)
 {
 	// TODO:
 	// Read user's own FIFO in an infinite loop for incoming messages
+	// The logic is similar to a server listening to requests
+	// print the incoming message to the standard output in the
+	// following format
+	// Incoming message from [source]: [message]
+	// put an end of line at the end of the message
+
 	while (1)
 	{
-		// The logic is similar to a server listening to requests
-		// print the incoming message to the standard output in the
-		// following format
-		// Incoming message from [source]: [message]
-		// put an end of line at the end of the message
-		printf("\n");
+		int fd;
+		int n;
+		struct message in_msg;
+
+		// NOTE: not sure if namedpipe is the correct pipe that the client is supposed to read from
+		// open named pipe for reading
+		fd = open("namedpipe", O_RDONLY);
+		n = read(fd, &in_msg, sizeof(in_msg));
+		while (n > 0)
+		{
+			if (n != sizeof(in_msg))
+			{
+				continue; // error check for partial messages
+			}
+
+			printf("Incoming message from %s: %s\n", in_msg.source, in_msg.msg);
+			n = read(fd, &in_msg, sizeof(in_msg));
+
+			if (n == -1) // handle read error
+			{
+				perror("read");
+			}
+		}
+
+		close(fd);
 	}
 
 	pthread_exit((void *)0);
